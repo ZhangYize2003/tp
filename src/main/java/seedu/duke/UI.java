@@ -7,7 +7,9 @@ public class UI {
     public Scanner in;
     public String lineSeparator = "________________________________________________________________";
 
-    public UI() { this.in = new Scanner(System.in); };
+    public UI() {
+        this.in = new Scanner(System.in);
+    }
 
     public void showWelcome() {
         String logo = " ______                                 _               _          _     \n"
@@ -21,16 +23,21 @@ public class UI {
 
         System.out.println("Hello from/n" + logo);
         System.out.println(lineSeparator);
-        System.out.println("Hello! I am an expenses tracker aimed to help you better organise your spending habits! Let's get started!\n" + lineSeparator);
+        System.out.println("Hello! I am an expenses tracker aimed to help you better organise your spending habits! " +
+                "Let's get started!\n" + lineSeparator);
     }
 
     public void showLine() {
         System.out.println(lineSeparator);
     }
 
-    public String readCommand() { return in.nextLine().trim(); }
+    public String readCommand() {
+        return in.nextLine().trim();
+    }
 
-    public void showError(String message) { System.out.println(message); }
+    public void showError(String message) {
+        System.out.println(message);
+    }
 
     public void showMessage(String message) {
         System.out.println(lineSeparator);
