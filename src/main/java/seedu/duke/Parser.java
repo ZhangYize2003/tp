@@ -24,6 +24,20 @@ public class Parser {
             //System.out.println("Bye!");
             return new ExitCommand();
 
+        case "budget":
+            try {
+                if (partsBySpace.length < 2) {
+                    throw new ExpensiveLehException("Please provide a budget amount!");
+                }
+                double budgetAmount = Double.parseDouble(partsBySpace[1]);
+                if (budgetAmount <= 0) {
+                    throw new ExpensiveLehException("Budget must be a positive number!");
+                }
+                return new BudgetCommand(budgetAmount);
+            } catch (NumberFormatException e) {
+                throw new ExpensiveLehException("Please enter a valid budget amount!");
+            }
+
         case "add":
             System.out.println("Added!");
             return new AddCommand(new Others("placeholder", 0.0, LocalDate.now()));
