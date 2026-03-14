@@ -1,4 +1,4 @@
-package Storage;
+package storage;
 
 import seedu.duke.Expense;
 import seedu.duke.Food;
