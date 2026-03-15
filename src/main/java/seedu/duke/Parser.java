@@ -59,6 +59,9 @@ public class Parser {
             System.out.println("Listed!");
             return new ListCommand();
 
+        case "help":
+            return new HelpCommand();
+
         default:
             throw new ExpensiveLehException("Unknown command. Please use enter 'help' for the user guide.");
         }
