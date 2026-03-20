@@ -19,9 +19,18 @@ public class ExpenseManager {
         this.budget = budget;
     }
 
-    public void addExpense(Expense expense) {
-        assert expense != null : "Expense cannot be null";
+    public void addExpense(Expense expense) throws ExpensiveLehException {
+        if (expense == null) {
+            throw new ExpensiveLehException("Expense cannot be null.");
+        }
+
+        assert expense.getAmount() >= 0 : "Expense amount should not be negative";
+        assert !Double.isNaN(expense.getAmount()) : "Expense amount should not be NaN";
+        assert Double.isFinite(expense.getAmount()) : "Expense amount should be finite";
+
         expenses.add(expense);
+
+        assert expenses.contains(expense) : "Expense should be added to list";
     }
 
     public Expense deleteExpense(int index) throws ExpensiveLehException {
@@ -31,7 +40,7 @@ public class ExpenseManager {
         return expenses.remove(index);
     }
 
-    public Expense editExpense(int index, String category, String name, Double value, LocalDate date)
+    public void editExpense(int index, String category, String name, Double value, LocalDate date)
             throws ExpensiveLehException {
         if (index < 0 || index >= expenses.size()) {
             throw new ExpensiveLehException("Expense ID " + (index + 1) + " doesn't exist.");
@@ -59,11 +68,17 @@ public class ExpenseManager {
         }
 
         expenses.set(index, newExpense);
-        return currentExpense;
     }
 
-    public void setBudget(double budget) {
+    public void setBudget(double budget) throws ExpensiveLehException {
+        if (budget < 0) {
+            throw new ExpensiveLehException("Budget cannot be negative.");
+        }
+
         this.budget = budget;
+
+        assert !Double.isNaN(this.budget) : "Budget should never be NaN";
+        assert Double.isFinite(this.budget) : "Budget should be a finite number";
     }
 
     public double getBudget() {
