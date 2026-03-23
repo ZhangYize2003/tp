@@ -41,7 +41,7 @@ public class UI {
 
     public void showMessage(String message) {
         System.out.println(lineSeparator);
-        System.out.println(" ExpensiveLeh says -> " + message);
+        System.out.println("ExpensiveLeh says -> " + message);
         System.out.println(lineSeparator);
     }
 

@@ -10,9 +10,13 @@ public class AddCommand extends Command {
     @Override
     public void execute(ExpenseManager expenses, UI ui) throws ExpensiveLehException {
         expenses.addExpense(expense);
-        ui.showMessage("Expense added successfully! Category: " + expense.getCategory()
-                + ", Name: " + expense.getDescription()
-                + ", Value: $" + String.format("%.2f", expense.getAmount())
-                + ", Date: " + expense.getFormattedDate());
+        ui.showMessage("Expense added successfully!"
+                + "\n================================================"
+                + "\nCategory : " + expense.getCategory()
+                + "\nName     : " + expense.getDescription()
+                + "\nValue    : $" + String.format("%.2f", expense.getAmount())
+                + "\nDate     : " + expense.getFormattedDate()
+                + "\n================================================"
+                + "\nRemaining Budget: $" + String.format("%.2f", expenses.getRemainingBudget()));
     }
 }

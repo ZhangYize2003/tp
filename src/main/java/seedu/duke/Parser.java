@@ -21,7 +21,6 @@ public class Parser {
 
         switch (command) {
         case "exit":
-            //System.out.println("Bye!");
             return new ExitCommand();
 
         case "budget":
@@ -47,7 +46,6 @@ public class Parser {
         case "delete":
             try {
                 int deleteIndex = Integer.parseInt(partsBySpace[1]) - 1;
-                System.out.println("Deleted!");
                 return new DeleteCommand(deleteIndex);
             } catch (IndexOutOfBoundsException e) {
                 throw new ExpensiveLehException("Please enter a valid integer from the expense list!");
@@ -56,7 +54,6 @@ public class Parser {
             }
 
         case "list":
-            System.out.println("Listed!");
             return new ListCommand();
 
         case "help":
@@ -80,7 +77,12 @@ public class Parser {
                 if (part.startsWith("c/")) {
                     category = part.substring(2);
                 } else if (part.startsWith("n/")) {
-                    name = part.substring(2);
+                    StringBuilder nameParts = new StringBuilder(part.substring(2));
+
+                    while (i + 1 < parts.length && !parts[i+1].startsWith("a/")) {
+                        nameParts.append(" ").append(parts[++i]);
+                    }
+                    name = nameParts.toString();
                 } else if (part.startsWith("a/")) {
                     amount = Double.parseDouble(part.substring(2));
                 } else if (part.startsWith("d/")) {
@@ -119,7 +121,6 @@ public class Parser {
                 expense = new Others(name, amount, date);
             }
 
-            System.out.println("Added!");
             return new AddCommand(expense);
 
         } catch (java.time.format.DateTimeParseException e) {
@@ -157,7 +158,12 @@ public class Parser {
                 if (part.startsWith("c/")) {
                     category = part.substring(2);
                 } else if (part.startsWith("n/")) {
-                    name = part.substring(2);
+                    StringBuilder nameParts = new StringBuilder(part.substring(2));
+
+                    while (i + 1 < parts.length && !parts[i+1].startsWith("a/")) {
+                        nameParts.append(" ").append(parts[++i]);
+                    }
+                    name = nameParts.toString();
                 } else if (part.startsWith("a/")) {
                     amount = Double.parseDouble(part.substring(2));
                 } else if (part.startsWith("d/")) {
@@ -175,7 +181,6 @@ public class Parser {
                 throw new ExpensiveLehException("Expense amount must be positive.");
             }
 
-            System.out.println("Edited!");
             return new EditCommand(editIndex, category, name, amount, date);
 
         } catch (java.time.format.DateTimeParseException e) {
