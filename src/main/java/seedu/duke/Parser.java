@@ -56,6 +56,17 @@ public class Parser {
         case "list":
             return new ListCommand();
 
+        case "search":
+            try {
+                if (partsBySpace.length < 2) {
+                    throw new ExpensiveLehException("Please provide a keyword to search for!");
+                }
+                String keyword = line.substring(line.indexOf("search") + 6).trim();
+                return new SearchCommand(keyword);
+            } catch (Exception e) {
+                throw new ExpensiveLehException("Search error: " + e.getMessage());
+            }
+
         case "rank":
             return new RankCommand();
 
