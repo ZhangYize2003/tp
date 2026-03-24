@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.time.LocalDate; // Need this for parsing
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Storage {
     private String filePath;
@@ -21,11 +22,14 @@ public class Storage {
         public final double budget;
         public final ArrayList<Expense> expenses;
         public final ArrayList<Loan> loans;
+        public final HashMap<String, Double> categoryBudgets;
 
-        public StorageData(double budget, ArrayList<Expense> expenses, ArrayList<Loan> loans) {
+        public StorageData(double budget, ArrayList<Expense> expenses, ArrayList<Loan> loans,
+                           HashMap<String, Double> categoryBudgets) {
             this.budget = budget;
             this.expenses = expenses;
             this.loans = loans;
+            this.categoryBudgets = categoryBudgets != null ? categoryBudgets : new HashMap<>();
         }
     }
 
@@ -33,8 +37,9 @@ public class Storage {
         this.filePath = filePath;
     }
 
-    // Fixed the Arraylist capitalization
-    public void save(double budget, ArrayList<Expense> expenses, ArrayList<Loan> loans) throws IOException {
+    public void save(double budget, ArrayList<Expense> expenses, ArrayList<Loan> loans,
+                     HashMap<String, Double> categoryBudgets ) throws IOException {
+
         File f = new File(filePath);
         if (f.getParentFile() != null && !f.getParentFile().exists()) {
             f.getParentFile().mkdirs();
@@ -43,7 +48,11 @@ public class Storage {
         FileWriter fw = new FileWriter(f);
         fw.write("BUDGET | " + budget + System.lineSeparator());
 
-        // Save Expenses (added Date to keep format consistent)
+        for (String category : categoryBudgets.keySet()) {
+            double amount = categoryBudgets.get(category);
+            fw.write("CATEGORY_BUDGET | " + category.toLowerCase() + " | " + amount + System.lineSeparator());
+        }
+
         for (Expense e : expenses) {
             String type = e instanceof Food ? "F" : e instanceof Transport ? "T" : e instanceof Groceries ? "G" : "O";
             fw.write(type + " | " + e.getDescription() + " | " + e.getAmount() + " | " + e.getDate()
@@ -62,9 +71,10 @@ public class Storage {
         ArrayList<Expense> loadedExpenses = new ArrayList<>();
         ArrayList<Loan> loadedLoans = new ArrayList<>();
         double loadedBudget = 0.0;
+        HashMap<String, Double> loadedCategoryBudgets = new HashMap<>();
 
         File f = new File(filePath);
-        if (!f.exists()) return new StorageData(loadedBudget, loadedExpenses, loadedLoans);
+        if (!f.exists()) return new StorageData(loadedBudget, loadedExpenses, loadedLoans, loadedCategoryBudgets);
 
         Scanner s = new Scanner(f);
         while (s.hasNextLine()) {
@@ -74,6 +84,18 @@ public class Storage {
             String[] parts = line.split(" \\| ");
             if (parts[0].equals("BUDGET")) {
                 loadedBudget = Double.parseDouble(parts[1]);
+                continue;
+            }
+
+            if (parts[0].equals("CATEGORY_BUDGET")) {
+                String category = parts[1];
+                double amount = Double.parseDouble(parts[2]);
+
+                if (amount < 0) {
+                    throw new IOException("Invalid category budget in file: category budget cannot be negative");
+                }
+
+                loadedCategoryBudgets.put(category.toLowerCase(), amount);
                 continue;
             }
 
@@ -97,6 +119,7 @@ public class Storage {
             loadedExpenses.add(expense);
         }
         s.close();
-        return new StorageData(loadedBudget, loadedExpenses, loadedLoans);
+        return new StorageData(loadedBudget, loadedExpenses, loadedLoans, loadedCategoryBudgets);
+
     }
 }

@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -31,23 +32,22 @@ class StorageTest {
         // 1. Prepare Expenses
         double budget = 500.0;
         ArrayList<Expense> expenses = new ArrayList<>();
-        expenses.add(new Food("Chicken Rice", 4.50));
-        expenses.add(new Transport("Bus", 1.20));
-        expenses.add(new Groceries("Shampoo", 6.90));
-        expenses.add(new Others("Pickleball racquet", 67.0));
+        expenses.add(new Food("Chicken Rice", 4.50, testDate));
+        expenses.add(new Transport("Bus", 1.20, testDate));
+        expenses.add(new Groceries("Shampoo", 6.90, testDate));
+        expenses.add(new Others("Pickleball racquet", 67.0, testDate));
 
-        // 2. Prepare Loans
+        // Prepare Loans
         ArrayList<Loan> loans = new ArrayList<>();
         loans.add(new Loan("Jack", 50.0, testDate));
         loans.add(new Loan("Ashley", 60, testDate));
+        // Save data
+        storage.save(budget, expenses, loans, new HashMap<>());
 
-        // 3. Save all data (Passing the new loans list)
-        storage.save(budget, expenses, loans);
-
-        // 4. Load all data
+        // Load all data
         Storage.StorageData loadedData = storage.load();
 
-        // 5. Verify Budget and Expenses
+        // Verify Budget and Expenses
         assertEquals(budget, loadedData.budget, "Budget should match");
         assertEquals(4, loadedData.expenses.size(), "Should load 4 expenses");
         assertTrue(loadedData.expenses.get(0) instanceof Food);
