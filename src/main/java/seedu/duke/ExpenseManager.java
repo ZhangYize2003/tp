@@ -122,4 +122,18 @@ public class ExpenseManager {
         }
         return map;
     }
+
+    public ArrayList<Expense> searchByKeyword(String keyword) {
+        ArrayList<Expense> results = new ArrayList<>();
+        String lowerKeyword = keyword.toLowerCase();
+        
+        for (Expense expense : expenses) {
+            if (expense.getDescription().toLowerCase().contains(lowerKeyword) ||
+                expense.getCategory().toLowerCase().contains(lowerKeyword)) {
+                results.add(expense);
+            }
+        }
+        
+        return results;
+    }
 }
