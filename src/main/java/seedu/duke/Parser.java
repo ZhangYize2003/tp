@@ -125,6 +125,19 @@ public class Parser {
 
         try {
             String[] parts = line.split("\\s+");
+
+            if (parts.length > 1 && parts[1].equals("bookmark")) {
+                if (parts.length < 3) {
+                    throw new ExpensiveLehException("Please enter a bookmark index!");
+                }
+                try {
+                    int bookmarkIndex = Integer.parseInt(parts[2]) - 1;
+                    return new AddCommand(bookmarkIndex, "bookmark");
+                } catch (NumberFormatException e) {
+                    throw new ExpensiveLehException("Please enter a valid integer!");
+                }
+            }
+
             for (int i = 1; i < parts.length; i++) {
                 String part = parts[i];
                 if (part.startsWith("c/")) {
