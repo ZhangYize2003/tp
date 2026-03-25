@@ -89,6 +89,8 @@ public class Parser {
         case "list": // either list budgets or list expenses
             if (partsBySpace.length > 1 && partsBySpace[1].equalsIgnoreCase("budgets")) {
                 return new ListBudgetsCommand();
+            } else if (partsBySpace.length > 1 && partsBySpace[1].equalsIgnoreCase("bookmarks")) {
+                return new ListCommand("bookmarks");
             }
             return new ListCommand("expenses");
 

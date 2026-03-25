@@ -2,6 +2,7 @@ package seedu.duke;
 
 import loans.Loan;
 import loans.LoanManager;
+import storage.Bookmark;
 
 import java.util.ArrayList;
 
@@ -22,6 +23,8 @@ public class ListCommand extends Command {
     public void execute(Managers manager, UI ui) throws ExpensiveLehException {
         if (listType.equalsIgnoreCase("loans")) {
             listLoans(manager.getLoanManager(), ui);
+        } else if (listType.equalsIgnoreCase("bookmarks")) {
+            listBookmarks(manager.getBookmark(), ui);
         } else {
             listExpenses(manager.getExpenseManager(), ui);
         }
@@ -29,7 +32,7 @@ public class ListCommand extends Command {
 
     private void listExpenses(ExpenseManager expenses, UI ui) {
         if (expenses.isEmpty()) {
-            ui.showMessage("No expense added yet");
+            ui.showMessage("No expenses added yet");
             return;
         }
 
@@ -58,6 +61,28 @@ public class ListCommand extends Command {
             result.append(String.format("%-4d %s%n", i + 1, loans.get(i).toString()));
         }
         result.append(String.format("\nTotal Owed to You: $%.2f", loanManager.getTotalAmountLent()));
+        ui.showMessage(result.toString());
+    }
+
+    private void listBookmarks(Bookmark bookmark, UI ui) {
+        ArrayList<Expense> bookmarks = bookmark.getBookmarks();
+
+        if (bookmarks.isEmpty()) {
+            ui.showMessage("No bookmarks added yet");
+            return;
+        }
+
+        StringBuilder result = new StringBuilder();
+        result.append("\n--- Bookmarks list ---\n");
+        result.append(String.format("%-6s %-12s %-20s %-10s %-12s%n", "Index", "Category", "Name", "Value", "Date"));
+        for (int i = 0; i < bookmarks.size(); i++) {
+            Expense expense = bookmarks.get(i);
+            result.append(String.format("%-6d %-12s %-20s $%-9.2f %-12s%n",
+                    i + 1, expense.getCategory(), expense.getDescription(),
+                    expense.getAmount(), expense.getFormattedDate()));
+        }
+        result.append("\nUse \"add bookmark [index]\" to add a bookmark to your expense list");
+
         ui.showMessage(result.toString());
     }
 }
