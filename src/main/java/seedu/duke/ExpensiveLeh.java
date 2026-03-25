@@ -1,5 +1,6 @@
 package seedu.duke;
 
+import storage.Bookmark;
 import storage.Storage;
 import loans.LoanManager;
 import java.io.IOException;
@@ -9,18 +10,20 @@ public class ExpensiveLeh {
     private Parser parser = new Parser();
     private UI ui = new UI();
     private Storage storage = new Storage("data/expenses.txt");
+    private Bookmark bookmark = new Bookmark("data/bookmarks.txt");
     private Managers managers;
 
     public void run() {
         try {
             Storage.StorageData data = storage.load();
+            bookmark.load();
             
             managers = new Managers(new ExpenseManager(data.expenses, data.budget, data.categoryBudgets), 
-                    new LoanManager(data.loans));
+                    new LoanManager(data.loans), bookmark);
 
         } catch (IOException e) {
             ui.showError("Could not load save file: " + e.getMessage());
-            managers = new Managers(new ExpenseManager(), new LoanManager());
+            managers = new Managers(new ExpenseManager(), new LoanManager(), bookmark);
         }
 
         ui.showWelcome();

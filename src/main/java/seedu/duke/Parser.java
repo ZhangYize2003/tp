@@ -66,11 +66,20 @@ public class Parser {
         case "loans": // list all loans only
             return new ListCommand("loans");
 
-
         case "paid":
             try {
                 int deleteIndex = Integer.parseInt(partsBySpace[1]) - 1;
                 return new DeleteCommand(deleteIndex, "loan");
+            } catch (IndexOutOfBoundsException e) {
+                throw new ExpensiveLehException("Please enter a valid integer from the expense list!");
+            } catch (NumberFormatException e) {
+                throw new ExpensiveLehException("Please enter a valid integer!");
+            }
+
+        case "bookmark":
+            try {
+                int bookmarkIndex = Integer.parseInt(partsBySpace[1]) - 1;
+                return new BookmarkCommand(bookmarkIndex);
             } catch (IndexOutOfBoundsException e) {
                 throw new ExpensiveLehException("Please enter a valid integer from the expense list!");
             } catch (NumberFormatException e) {

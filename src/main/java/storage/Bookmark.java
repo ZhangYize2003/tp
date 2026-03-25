@@ -40,7 +40,7 @@ public class Bookmark {
 
     public Expense getBookmark(int index) throws ExpensiveLehException {
         if (index < 0 || index >= bookmarks.size()) {
-            throw new ExpensiveLehException("Please provide a valid bookmark index to add!");
+            throw new ExpensiveLehException("Please provide a valid bookmark index!");
         }
         return bookmarks.get(index);
     }
@@ -78,7 +78,7 @@ public class Bookmark {
                 continue;
             }
 
-            String[] parts = line.split("\\s+");
+            String[] parts = line.split(" \\| ");
             String category = parts[0];
             String description = parts[1];
             double amount = Double.parseDouble(parts[2]);
