@@ -22,13 +22,15 @@ them to track their expenses so that they do not overspend their budgets.
 
 ## User Stories
 
-| Version | As a ... | I want to ...                            | So that I can ...                         |
-|---------|----------|------------------------------------------|-------------------------------------------|
-| v1.0    | user     | see my past expenses                     | track my total expenditure                |
-| v2.0    | user     | add people who owe me money              | remember to chase them to return my money |
-| v2.0    | user     | mark people who have returned money owed | stop chasing them for money               |
-|         |          |                                          |                                           |
-  
+| Version | As a ...  | I want to ...                                               | So that I can ...                                                  |
+|---------|-----------|-------------------------------------------------------------|--------------------------------------------------------------------|
+| v1.0    | user      | see my past expenses                                        | track my total expenditure                                         |
+| v1.0    | user      | log an expense using a single command                       | record expenses quickly without navigating through multiple inputs |
+| v2.0    | user      | add people who owe me money                                 | remember to chase them to return my money                          |
+| v2.0    | user      | mark people who have returned money owed                    | stop chasing them for money                                        |
+| v2.0    | user      | know my remaining budget immediately after logging expenses | know how much money I have saved                                   |
+| v2.0    | lazy user | bookmark frequent expenses and add them                     | log them easily without typing everything out                      |
+
 ## Non-Functional Requirements
 
 {Give non-functional requirements}

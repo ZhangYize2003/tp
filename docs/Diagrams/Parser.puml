@@ -1,0 +1,94 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class Parser {
+    - scanner : Scanner
+    + readCommand() : Command
+    - parseAddCommand(line : String) : Command
+    - parseEditCommand(line : String) : Command
+}
+
+abstract class Command {
+    + execute(expenses : ExpenseManager, ui : UI) : void
+}
+
+class AddCommand {
+    - expense : Expense
+    + AddCommand(expense : Expense) : void
+}
+
+class EditCommand {
+    - index : int
+    - category : String
+    - name : String
+    - amount : Double
+    - date : LocalDate
+    + EditCommand(index : int, category : String, name: String, value : Double, date : LocalDate) : void
+}
+
+class DeleteCommand {
+    - index : int
+    + DeleteCommand(index : int) : void
+}
+
+class BudgetCommand {
+    - amount : double
+    + BudgetCommand(value : double) : void
+}
+
+class ListCommand {
+
+}
+
+class HelpCommand {
+
+}
+
+class ExitCommand {
+
+}
+
+abstract class Expense {
+    - {static} FORMATTER : DateTimeFormatter
+    # description : String
+    # amount : double
+    # date : LocalDate
+
+    + Expense(description : String, amount : double, date : LocalDate)
+    + Expense(description : String, amount : double)
+    + getDescription() : String
+    + getAmount() : double
+    + getDate() : LocalDate
+    + getFormattedDate() : String
+    + getCategory() : String
+    + toString() : String
+}
+
+class Food
+class Transport
+class Groceries
+class Others
+
+class ExpensiveLehException {
+    + ExpensiveLehException(message : String)
+}
+
+' Inheritance
+Command <|-- AddCommand
+Command <|-- EditCommand
+Command <|-- DeleteCommand
+Command <|-- BudgetCommand
+Command <|-- ListCommand
+Command <|-- HelpCommand
+Command <|-- ExitCommand
+Expense <|-- Food
+Expense <|-- Transport
+Expense <|-- Groceries
+Expense <|-- Others
+
+' Relationships
+Parser --> Command : creates
+Parser --> ExpensiveLehException : throws
+AddCommand --> Expense
+
+@enduml

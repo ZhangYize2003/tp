@@ -1,0 +1,91 @@
+@startuml
+skinparam Style strictuml
+skinparam SequenceMessageAlignment center
+
+actor User
+participant Parser
+participant Command
+participant "ExitCommand" as Exit
+participant "BudgetCommand" as Budget
+participant "AddCommand" as Add
+participant "EditCommand" as Edit
+participant "DeleteCommand" as Delete
+
+participant "ListCommand" as List
+participant "HelpCommand" as Help
+
+User -> Parser : readCommand()
+activate Parser
+
+Parser -> Parser : print("> ")
+Parser -> Parser : read input
+Parser -> Parser : split input
+
+alt command == "exit"
+    Parser -> Exit : new ExitCommand()
+    activate Exit
+    Exit --> Parser : return ExitCommand
+    deactivate Exit
+
+else command == "budget"
+    Parser -> Parser : parse amount
+    alt valid amount
+        Parser -> Budget : new BudgetCommand(amount)
+        activate Budget
+        Budget --> Parser : return BudgetCommand
+        deactivate Budget
+    else invalid
+        Parser --> User : throw ExpensiveLehException
+    end
+
+else command == "add"
+    Parser -> Parser : parseAddCommand(line)
+    activate Parser
+    Parser -> Parser : extract c/, n/, a/, d/
+    Parser -> Add : new AddCommand(expense)
+    activate Add
+    Add --> Parser : return AddCommand
+    deactivate Add
+    deactivate Parser
+
+else command == "edit"
+    Parser -> Parser : parseEditCommand(line)
+    activate Parser
+    Parser -> Parser : extract index + fields
+    Parser -> Edit : new EditCommand()
+    activate Edit
+    Edit --> Parser : return EditCommand
+    deactivate Edit
+    deactivate Parser
+
+else command == "delete"
+    Parser -> Parser : parse index
+    alt valid index
+        Parser -> Delete : new DeleteCommand(index)
+        activate Delete
+        Delete --> Parser : return DeleteCommand
+        deactivate Delete
+    else invalid
+        Parser --> User : throw ExpensiveLehException
+    end
+
+else command == "list"
+    Parser -> List : new ListCommand()
+    activate List
+    List --> Parser : return ListCommand
+    deactivate List
+
+else command == "help"
+    Parser -> Help : new HelpCommand()
+    activate Help
+    Help --> Parser : return HelpCommand
+    deactivate Help
+
+else unknown command
+    Parser --> User : throw ExpensiveLehException
+end
+
+Parser --> User : return Command
+deactivate Parser
+
+@enduml
