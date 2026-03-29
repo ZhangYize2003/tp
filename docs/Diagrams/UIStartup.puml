@@ -1,0 +1,40 @@
+@startuml
+
+skinparam SequenceMessageAlignment center
+
+actor User
+participant ":ExpensiveLeh" as Main
+participant ":UI" as UI
+
+User -> Main : Starts application
+activate Main
+
+create UI
+Main -> UI : new UI()
+activate UI
+UI --> Main
+deactivate UI
+
+Main -> UI : showWelcome()
+activate UI
+UI --> User : Displays ASCII logo & welcome message
+UI --> Main
+deactivate UI
+
+note right of Main
+  The application enters a loop
+  to continuously read user inputs
+end note
+
+loop until "bye" command
+    Main -> UI : readCommand()
+    activate UI
+    User -> UI : Types input string
+    UI --> Main : Returns command string
+    deactivate UI
+
+    note right of Main: Passes string to Parser...
+end
+
+deactivate Main
+@enduml

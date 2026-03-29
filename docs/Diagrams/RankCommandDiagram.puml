@@ -1,0 +1,57 @@
+@startuml
+
+skinparam SequenceMessageAlignment center
+
+actor User
+participant ":ExpensiveLeh" as Main
+participant ":Parser" as Parser
+participant "r:RankCommand" as RankCommand
+participant ":ExpenseManager" as ExpenseManager
+participant ":UI" as UI
+
+User -> Main : inputs "rank"
+activate Main
+
+Main -> Parser : readCommand("rank")
+activate Parser
+
+create RankCommand
+Parser -> RankCommand : new RankCommand()
+activate RankCommand
+RankCommand --> Parser : r
+deactivate RankCommand
+
+Parser --> Main : r
+deactivate Parser
+
+Main -> RankCommand : execute(expenses, ui)
+activate RankCommand
+
+RankCommand -> ExpenseManager : getCategoryTotals()
+activate ExpenseManager
+ExpenseManager --> RankCommand : unsortedTotals
+deactivate ExpenseManager
+
+note right of RankCommand
+  Converts unsortedTotals Map
+  to a sorted ArrayList
+end note
+
+RankCommand -> UI : showRanking(rankedList)
+activate UI
+
+note right of UI
+  Loops through list and
+  generates visual bar
+  blocks for each category
+end note
+
+UI --> RankCommand
+deactivate UI
+
+RankCommand --> Main
+deactivate RankCommand
+
+Main --> User : displays ranked bar chart
+deactivate Main
+@enduml

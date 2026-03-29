@@ -2,7 +2,10 @@ package loans;
 
 import seedu.duke.ExpensiveLehException;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Manages the list of loans to others
@@ -54,5 +57,33 @@ public class LoanManager {
             total += loan.getAmount();
         }
         return total;
+    }
+
+    public Map<String, Double> getPersonTotals() {
+        Map<String, Double> map = new HashMap<>();
+
+        for (Loan loan : loans) {
+            String person = loan.getDescription();
+            double amount = loan.getAmount();
+
+            map.put(person, map.getOrDefault(person, 0.0) + amount);
+        }
+
+        return map;
+    }
+
+    public void editLoan(int index, String name, Double value, LocalDate date) throws ExpensiveLehException {
+        if (index < 0 || index >= loans.size()) {
+            throw new ExpensiveLehException("Loan ID " + (index + 1) + " doesn't exist yet");
+        }
+
+        Loan currentLoan = loans.get(index);
+
+        String finalName = name != null ? name: currentLoan.getDescription();
+        Double finalValue = value != null ? value: currentLoan.getAmount();
+        LocalDate finalDate = date != null ? date: currentLoan.getDate();
+
+        Loan newLoan = new Loan(finalName, finalValue, finalDate);
+        loans.set(index, newLoan);
     }
 }

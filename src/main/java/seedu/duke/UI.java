@@ -61,21 +61,26 @@ public class UI {
         return blockCharacter.repeat(numberOfBlocks);
     }
 
-    public void showRanking(List<Map.Entry<String, Double>> rankedList) {
+    public void showRanking(List<Map.Entry<String, Double>> rankedList, String type) {
         System.out.println(lineSeparator);
-        System.out.println("ExpensiveLeh says -> Here is your spending ranked, by category: ");
+
+        if (type.equals("loan")) {
+            System.out.println("ExpensiveLeh says -> Here are your loans ranked, by person: ");
+        } else {
+            System.out.println("ExpensiveLeh says -> Here is your spending ranked, by category: ");
+        }
         System.out.println();
 
         double highestAmount = rankedList.get(0).getValue();
 
         for (int i = 0; i < rankedList.size(); i++) {
             Map.Entry<String, Double> entry = rankedList.get(i);
-            String category = entry.getKey();
+            String categoryOrPerson = entry.getKey();
             double amount = entry.getValue();
 
             String visualBar = generateBar(amount, highestAmount);
 
-            System.out.printf("  %d. %-15s [$%8.2f] %s\n", (i + 1), category, amount, visualBar);
+            System.out.printf("  %d. %-15s [$%8.2f] %s\n", (i + 1), categoryOrPerson, amount, visualBar);
         }
         System.out.println(lineSeparator);
     }
