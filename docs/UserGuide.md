@@ -9,25 +9,66 @@
 {Give steps to get started quickly}
 
 1. Ensure that you have Java 17 or above installed.
-1. Down the latest version of `Duke` from [here](http://link.to/duke).
+2. Down the latest version of `Duke` from [here](http://link.to/duke).
 
 ## Features 
 
-{Give detailed description of each feature}
+## Loans
+ExpensiveLeh can keep track of people who owe you money.
 
-### Adding a todo: `todo`
-Adds a new item to the list of todo items.
+### Adding a loan: `add`
+Adds a new loan.
 
-Format: `todo n/TODO_NAME d/DEADLINE`
-
-* The `DEADLINE` can be in a natural language format.
-* The `TODO_NAME` cannot contain punctuation.  
+Format: `add c/loan n/NAME a/AMOUNT [date/DATE]`
 
 Example of usage: 
 
-`todo n/Write the rest of the User Guide d/next week`
+`add c/loan n/Jack a/100`
 
-`todo n/Refactor the User Guide to remove passive voice d/13/04/2020`
+Output:
+````
+ExpensiveLeh says -> Loan recorded successfully!
+================================================
+Debtor   : Jack
+Amount   : $100.00
+Date     : 30-03-2026
+================================================
+Total Owed to You: $2433.00
+________________________________________________________________
+````
+### Listing a loan: `list`
+Lists all loans.
+
+Format: `list loans`
+
+Output:
+````
+ExpensiveLeh says -> 
+--- Current Loans (Money Owed to You) ---
+1    [OWED BY] Kim | $2333.00 | 24-03-2026
+2    [OWED BY] Jack | $100.00 | 30-03-2026
+
+Total Owed to You: $2433.00
+________________________________________________________________
+````
+
+### Deleting a loan: `delete`
+Deletes the specified loan.
+Format: `delete INDEX`
+* Deletes the person at the specified `INDEX`. 
+* The `INDEX` refers to the index number showed in the displayed loan list.
+* The index must be a **positive intege**r 1,2,3 ...
+
+Example of usage: 
+
+`delete loan 1`
+
+Output:
+`ExpensiveLeh says -> Loan ID 1 for Kim ($2333.00) deleted!`
+
+## Saving Data
+Loans, expenses, bookmarks and budgets are automatically saved in the disk. There is no need to save manually. 
+
 
 ## FAQ
 
