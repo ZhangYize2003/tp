@@ -27,17 +27,23 @@ As illustrated in the class diagram above, the `UI` component acts as the centra
 * **Simple Output:** The `showWelcome()`, `showMessage()`, and `showError()` methods provide simple, persona-aware feedback (e.g., using the "ExpensiveLeh says ->" prefix or wrapping in line separators) for greetings, success messages, and error notifications.
 * **Complex Data Display:** The `showRanking()` method handles the advanced formatting of complex data structures (specifically, creating the visual ASCII bar charts from sorted lists of category or loan totals) before outputting them. It leverages the private `generateBar()` method as an internal helper.
 
-### Logic component
+
+### Parser component
 
 API: `Parser.java`
 
-Here is the class diagram of the `Parser` class of the `Logic` component:
+Here is the class diagram of the `Parser` component:
 ![Parser Class Diagram](Diagrams/ParserClassDiagram.png)
 
-The sequence diagram below illustrates the interactions within the Logic component.
+
+The class diagram below shows the dependencies of `Command` on `Managers`, `UI`, 
+and `Expense` subclasses:
+![Parser Dependencies Class Diagram](Diagrams/ParserDependenciesDiagram.png)
+
+The sequence diagram below illustrates the interactions within the `Parser` component:
 ![readCommand Sequence Diagram](Diagrams/ReadCommandSequenceDiagram.png)
 
-How the Logic component works:
+How the `Parser` component works:
 
 * When `ExpensiveLeh` is called upon to execute a command, the input is passed to the `Parser` object via `readCommand()`, which reads and tokenises the raw input string.
 * This results in `Parser` returning a `Command` subclass object, such as `AddCommand`, back to `ExpensiveLeh`.
@@ -152,6 +158,7 @@ The sequence diagram below illustrates the interactions that occur when the user
 8. When this happens, the `UI` component captures this input and returns the raw command string back to `ExpensiveLeh`.
 9. `ExpensiveLeh` then passes this raw string over to the `Parser` component to be interpreted and executed, which eventually leads to specific command flows.
 
+---
 
 ### Expense Management Features
 
@@ -211,6 +218,8 @@ The following sequence diagram shows how an add expense operation flows through 
 
 ![Add Expense Sequence Diagram](Diagrams/AddExpenseSequenceDiagram.png)
 
+---
+
 #### Delete Expense Feature
 
 **Proposed Implementation**
@@ -252,6 +261,8 @@ expense delete 1
 The following sequence diagram shows how a delete expense operation flows through the system:
 
 ![Delete Expense Sequence Diagram](Diagrams/DeleteExpenseSequenceDiagram.png)
+
+---
 
 #### Edit Expense Feature
 
@@ -377,6 +388,8 @@ The sequence diagram below illustrates the interactions within the system when a
 - *Pros*: Encapsulates budget logic, easier to extend, allows persistence integration
 - *Cons*: More complex design, additional class to maintain
 
+---
+
 ### Rank Feature
 
 The rank feature allows users to visualize their spending habits or loan distributions by displaying an ordered ASCII bar chart. It supports ranking both expenses (by category) and loans (by person).
@@ -398,6 +411,65 @@ The sequence diagram below illustrates the interactions within the system when a
 7. Finally, `RankCommand` invokes `ui.showRanking()`, passing in the sorted list and the type flag. The `UI` component loops through the list, calculates the proportional length of the ASCII bar for each item relative to the highest amount, and displays the formatted chart to the user.
 
 The same method of execution works for the user input `rank loans` as well. In this similar case, `Parser` identifies the "loans" keyword and carries out the same execution, however, it instead retrieves `LoanManager` and calls `getPersonsTotals()`, which returns a map containing the total aggregated, owed amounts, grouped by person.
+
+---
+
+### Bookmarks Feature
+
+**Proposed Implementation**
+
+The bookmark feature is facilitated by the `Bookmark` class in the `storage` package and `BookmarkCommand` in the `seedu.duke` package. 
+The `Bookmark` class maintains an`ArrayList<Expense>` of bookmarked expenses, stored internally and persisted to a file. 
+It implements the following operations:
+
+- `Bookmark.addBookmark(expense)` — Adds an expense in the expense list to the bookmark list.
+- `Bookmark.removeBookmark(index)` — Removes a bookmarked expense at the given index in the bookmark list.
+- `Bookmark.getBookmark(index)` — Retrieves a bookmarked expense at the given index in the bookmark list.
+- `Bookmark.save()` — Persists the current bookmark list to the save file.
+- `Bookmark.load()` — Loads the bookmark list from the save file on startup.
+
+Here is the class diagram of `Bookmark`:
+
+![Bookmark Class Diagram](Diagrams/BookmarkClassDiagram.png)
+
+The sequence diagram below illustrates the interactions within the system when a user executes the `Bookmark` command.
+
+![BookmarkCommand Sequence Diagram](Diagrams/BookmarkSequenceDiagram.png)
+
+Given below is an example usage of `BookmarkCommand`:
+
+**Step 1.** The user executes `bookmark 2` to bookmark the 2nd expense in the expense list. 
+`Parser` parses the index and creates a `BookmarkCommand(1)`.
+
+**Step 2.** `BookmarkCommand.execute()` retrieves the expense at index 1 from `ExpenseManager` via `Managers.getExpenseManager()`.
+
+**Step 3.** `Bookmark.addBookmark(expense)` is called to add the retrieved expense to the bookmark list.
+
+**Step 4.** `Bookmark.save()` is called to immediately persist the updated bookmark list to `data/bookmarks.txt`.
+
+**Design Considerations**
+
+**Aspect: How bookmarks are persisted**
+
+**Alternative 1 (current choice):** Save the entire bookmark list to file after every modification.
+- *Pros*: Simple to implement. The save file is always up to date, so no data is lost if the application crashes.
+- *Cons*: Rewrites the entire file even for a single addition or deletion, which may be slow if the bookmark list is large.
+
+**Alternative 2:** Persist bookmarks only when the application exits, rather than after every modification.
+- *Pros*: More efficient as file read or write only happens once per session.
+- *Cons*: If the application crashes mid-session, all bookmark changes made during that session will be lost
+
+**Aspect: How bookmarked expenses are stored**
+
+**Alternative 1 (current choice):** Store bookmarks as `Expense` objects in an `ArrayList`, saved to a separate file from expenses.
+- *Pros*: Bookmarks are independent of the expense list, so deleting an expense does not affect saved bookmarks.
+- *Cons*: The bookmarked expense and the original expense are separate copies, so edits to the original expense are not reflected in the bookmark.
+
+**Alternative 2:** Store bookmarks as indices referencing the expense list.
+- *Pros*: Bookmarks always reflect the latest state of the referenced expense since they point directly to it.
+- *Cons*: Bookmarks become invalid if the referenced expense is deleted or if the expense list order changes, requiring additional validation logic.
+
+---
 
 ## Product scope
 ### Target user profile

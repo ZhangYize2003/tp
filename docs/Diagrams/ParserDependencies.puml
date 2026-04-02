@@ -1,0 +1,55 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+abstract class Command {
+    + execute(managers : Managers, ui : UI) : void
+}
+
+class Managers {
+    - expenseManager : ExpenseManager
+    - loanManager : LoanManager
+    - bookmark : Bookmark
+    + Managers(em : ExpenseManager, lm : LoanManager, bookmark : Bookmark)
+    + getExpenseManager() : ExpenseManager
+    + getLoanManager() : LoanManager
+    + getBookmark() : Bookmark
+}
+
+class AddCommand {
+    - itemToAdd : Object
+    - type : String
+    + AddCommand(expense : Expense, type : String)
+    + AddCommand(loan : Loan, type : String)
+    + AddCommand(index : int, type : String)
+}
+
+abstract class Expense {
+    # description : String
+    # amount : double
+    # date : LocalDate
+    + getDescription() : String
+    + getAmount() : double
+    + getDate() : LocalDate
+    + getCategory() : String
+}
+
+class Food
+class Transport
+class Groceries
+class Others
+
+Command --> Managers : uses
+Command --> UI : uses
+Managers --> ExpenseManager
+Managers --> LoanManager
+Managers --> Bookmark
+
+AddCommand --> Expense : creates
+AddCommand --> Loan : creates
+
+Expense <|-- Food
+Expense <|-- Transport
+Expense <|-- Groceries
+Expense <|-- Others
+
+@enduml

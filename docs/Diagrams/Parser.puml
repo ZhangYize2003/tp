@@ -13,16 +13,6 @@ abstract class Command {
     + execute(managers : Managers, ui : UI) : void
 }
 
-class Managers {
-    - expenseManager : ExpenseManager
-    - loanManager : LoanManager
-    - bookmark : Bookmark
-    + Managers(em : ExpenseManager, lm : LoanManager, bookmark : Bookmark)
-    + getExpenseManager() : ExpenseManager
-    + getLoanManager() : LoanManager
-    + getBookmark() : Bookmark
-}
-
 class AddCommand {
     - itemToAdd : Object
     - type : String
@@ -95,30 +85,21 @@ class ExitCommand {
 
 }
 
-abstract class Expense {
-    - {static} FORMATTER : DateTimeFormatter
-    # description : String
-    # amount : double
-    # date : LocalDate
-
-    + Expense(description : String, amount : double, date : LocalDate)
-    + Expense(description : String, amount : double)
-    + getDescription() : String
-    + getAmount() : double
-    + getDate() : LocalDate
-    + getFormattedDate() : String
-    + getCategory() : String
-    + toString() : String
-}
-
-class Food
-class Transport
-class Groceries
-class Others
-
 class ExpensiveLehException {
     + ExpensiveLehException(message : String)
 }
+
+AddCommand -[hidden]-> EditCommand
+EditCommand -[hidden]-> DeleteCommand
+DeleteCommand -[hidden]-> BudgetCommand
+BudgetCommand -[hidden]-> CategoryBudgetCommand
+CategoryBudgetCommand -[hidden]-> ListCommand
+ListCommand -[hidden]-> ListBudgetsCommand
+ListBudgetsCommand -[hidden]-> BookmarkCommand
+BookmarkCommand -[hidden]-> SearchCommand
+SearchCommand -[hidden]-> RankCommand
+RankCommand -[hidden]-> HelpCommand
+HelpCommand -[hidden]-> ExitCommand
 
 ' Inheritance
 Command <|-- AddCommand
@@ -134,11 +115,6 @@ Command <|-- RankCommand
 Command <|-- HelpCommand
 Command <|-- ExitCommand
 
-Expense <|-- Food
-Expense <|-- Transport
-Expense <|-- Groceries
-Expense <|-- Others
-
 ' Relationships
 Parser --> Command : creates
 Parser --> ExpensiveLehException : throws
@@ -148,9 +124,5 @@ Command --> UI
 
 AddCommand --> Expense
 AddCommand --> Loan
-
-Managers --> ExpenseManager
-Managers --> LoanManager
-Managers --> Bookmark
 
 @enduml
