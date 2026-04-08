@@ -173,7 +173,7 @@ The sequence diagram below illustrates the interactions that occur when the user
 1. When the user launches the application, the main `ExpensiveLeh` class begins its execution.
 2. `ExpensiveLeh` creates a new instance of the `UI` class to handle user interactions.
 3. `ExpensiveLeh` invokes the `showWelcome()` method on the `UI` object.
-4. The `UI` component prints the application's custom ASCII logo and a welcome greeting to the user's console.
+4. The `UI` component prints the application's custom ASCII logo of the name `ExpensiveLeh` and a welcome greeting to the user's console.
 5. Following the greeting, the application enters a continuous `loop` that remains active until the exit command ("bye") is triggered.
 6. Within this loop, `ExpensiveLeh` calls `ui.readCommand()` to pause execution and wait for the user to type something.
 7. The user types a command string into the terminal.
@@ -550,14 +550,21 @@ them to track their expenses so that they do not overspend their budgets.
 
 ## User Stories
 
-| Version | As a ...  | I want to ...                                              | So that I can ...                                                  |
-|---------|-----------|------------------------------------------------------------|--------------------------------------------------------------------|
-| v1.0    | user      | see my past expenses                                       | track my total expenditure                                         |
-| v1.0    | user      | log an expense using a single command                      | record expenses quickly without navigating through multiple inputs |
-| v2.0    | user      | add people who owe me money                                | remember to chase them to return my money                          |
-| v2.0    | user      | mark people who have returned money owed                   | stop chasing them for money                                        |
-| v2.0    | user      | know my remaining budget immediately after logging expenses | know how much money I have saved                                   |
-| v2.0    | lazy user | bookmark frequent expenses and add them                    | log them easily without typing everything out                      |
+| Version | As a ...       | I want to ...                                               | So that I can ...                                                                       |
+|---------|----------------|-------------------------------------------------------------|-----------------------------------------------------------------------------------------|
+| v1.0    | new user       | be able to access a help function                           | easily see and learn how I can start using the product features without much difficulty |
+| v1.0    | user           | see my past expenses                                        | track my total expenditure                                                              |
+| v1.0    | user           | have an easy to use interface                               | use the  product without much difficulty and fatigue                                    |
+| v1.0    | impatient user | log an expense using a single command                       | record expenses quickly without navigating through multiple inputs                      |
+| v1.0    | user           | delete an expense or loan                                   | remove unwanted entries and entries that are no longer needed                           |
+| v2.0    | user           | edit an existing expense or loan                            | easily correct any misinputs I made or make changes to entries without difficulty       |
+| v2.0    | user           | add people who owe me money                                 | remember to chase them to return my money                                               |
+| v2.0    | user           | mark people who have returned money owed                    | stop chasing them for money                                                             |
+| v2.0    | user           | know my remaining budget immediately after logging expenses | know how much money I have saved                                                        |
+| v2.0    | user           | rank my expenses                                            | easily see which category of expense where I have spent the most                        |
+| v2.0    | user           | rank my loans                                               | easily see who owes me the most money                                                   |
+| v2.0    | visual learner | have a visual representation of my expenses and loans       | easily view my expense and loans progress at a single glance                            |
+| v2.0    | busy user      | search for my expenses and loans by keyword                 | easily find my saved expenses and loans                                                 |
 
 ## Non-Functional Requirements
 
