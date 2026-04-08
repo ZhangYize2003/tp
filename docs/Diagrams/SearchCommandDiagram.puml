@@ -1,4 +1,4 @@
-@startuml
+@startuml SearchCommandSequenceDiagram
 skinparam Style strictuml
 skinparam SequenceMessageAlignment center
 
@@ -7,7 +7,9 @@ participant ":ExpensiveLeh" as Main
 participant ":Parser" as Parser
 participant "s:SearchCommand" as SearchCommand
 participant ":ExpenseManager" as ExpenseManager
+participant ":LoanManager" as LoanManager
 participant "e:Expense" as Expense
+participant "l:Loan" as Loan
 participant ":UI" as UI
 
 User -> Main : inputs "search KEYWORD"
@@ -57,17 +59,48 @@ end
 ExpenseManager --> SearchCommand : matchedExpenses
 deactivate ExpenseManager
 
-alt matchedExpenses is empty
-    SearchCommand -> UI : showMessage("No expenses found...")
+SearchCommand -> LoanManager : searchByKeyword(keyword)
+activate LoanManager
+
+note right of LoanManager
+    Iterates through all loans
+    and checks if description or
+    category contains keyword
+    (case-insensitive)
+end note
+
+loop for each Loan l in loans
+    LoanManager -> Loan : getDescription()
+    activate Loan
+    Loan --> LoanManager : description
+    deactivate Loan
+
+    LoanManager -> Loan : getCategory()
+    activate Loan
+    Loan --> LoanManager : category
+    deactivate Loan
+
+    alt description or category contains keyword
+        LoanManager -> Loan : add to results
+    end
+end
+
+LoanManager --> SearchCommand : matchedLoans
+deactivate LoanManager
+
+alt both matchedExpenses and matchedLoans are empty
+    SearchCommand -> UI : showMessage("No expenses or loans found...")
     activate UI
     UI --> SearchCommand
     deactivate UI
-else matchedExpenses has results
+else results found
     note right of SearchCommand
         Formats matched expenses
-        as a formatted table with
-        Index, Category, Name,
-        Value, and Date columns
+        and loans in separate
+        sections as formatted
+        tables with Index,
+        Category, Name, Value,
+        and Date columns
     end note
 
     SearchCommand -> UI : showMessage(formattedResults)
