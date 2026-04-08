@@ -3,6 +3,7 @@ package seedu.duke;
 import loans.Loan;
 import loans.LoanManager;
 import storage.Bookmark;
+import java.time.LocalDate;
 
 public class AddCommand extends Command {
     private final Object itemToAdd;
@@ -52,13 +53,27 @@ public class AddCommand extends Command {
     public void addBookmark(ExpenseManager expenses, Bookmark bookmark, UI ui) {
         int index = (Integer) itemToAdd;
         Expense expense = bookmark.getBookmark(index);
-        expenses.addExpense(expense);
+
+        LocalDate today = LocalDate.now();
+        Expense newExpense;
+
+        if (expense instanceof Food) {
+            newExpense = new Food(expense.getDescription(), expense.getAmount(), today);
+        } else if (expense instanceof Transport) {
+            newExpense = new Transport(expense.getDescription(), expense.getAmount(), today);
+        } else if (expense instanceof Groceries) {
+            newExpense = new Groceries(expense.getDescription(), expense.getAmount(), today);
+        } else {
+            newExpense = new Others(expense.getDescription(), expense.getAmount(), today);
+        }
+
+        expenses.addExpense(newExpense);
         ui.showMessage("Expense added successfully!"
                 + "\n================================================"
-                + "\nCategory : " + expense.getCategory()
-                + "\nName     : " + expense.getDescription()
-                + "\nValue    : $" + String.format("%.2f", expense.getAmount())
-                + "\nDate     : " + expense.getFormattedDate()
+                + "\nCategory : " + newExpense.getCategory()
+                + "\nName     : " + newExpense.getDescription()
+                + "\nValue    : $" + String.format("%.2f", newExpense.getAmount())
+                + "\nDate     : " + newExpense.getFormattedDate()
                 + "\n================================================"
                 + "\nRemaining Budget: $" + String.format("%.2f", expenses.getRemainingBudget()));
     }

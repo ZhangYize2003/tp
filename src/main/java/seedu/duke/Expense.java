@@ -37,6 +37,10 @@ public abstract class Expense {
 
     public abstract String getCategory();
 
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+    
     @Override
     public String toString() {
         return getCategory() + " | " + description + " | $" + String.format("%.2f", amount)

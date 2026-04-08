@@ -136,7 +136,7 @@ Example: `bookmark 2`
 Output:
 ```
 ________________________________________________________________
-ExpensiveLeh says -> Successfully bookmarked: Food McDonald's $12.50 20-03-2026
+ExpensiveLeh says -> Successfully bookmarked: Food McDonald's $12.50
 ________________________________________________________________
 ```
 
@@ -146,6 +146,7 @@ Adds an existing bookmark to the expense list.
 Format: `add bookmark INDEX`
 * `INDEX` refers to the index number shown in `list bookmarks`.
 * `INDEX` must be a positive integer.
+* The expense date is automatically set as the user's local date.
 
 Example: `add bookmark 1`
 

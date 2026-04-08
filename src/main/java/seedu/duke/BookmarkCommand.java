@@ -22,8 +22,7 @@ public class BookmarkCommand extends Command {
 
             ui.showMessage("Successfully bookmarked: " + expense.getCategory()
                     + " " + expense.getDescription()
-                    + " $" + String.format("%.2f", expense.getAmount())
-                    + " " + expense.getFormattedDate());
+                    + " $" + String.format("%.2f", expense.getAmount()));
         } catch (IndexOutOfBoundsException e) {
             throw new ExpensiveLehException("Please provide a valid expense index to bookmark!");
         } catch (IOException e) {
