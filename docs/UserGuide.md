@@ -381,23 +381,44 @@ Food            $300.00         $279.00
 ________________________________________________________________
 ```
 
-### Searching for expenses: `search`
-Searches through all expenses to find items matching a keyword
+### Searching for expenses and loans: `search`
+Searches through both expenses and loans to find items matching a keyword
 
 Format: `search KEYWORD`
 * The search is case-insensitive, so searching for "food" will match "Food"
 * Partial matches are included (e.g., searching "mc" will find "McDonald's")
-* Results are displayed in a formatted table with index, category, name, value, and date
+* Results are displayed in separate sections for expenses and loans
+* Both sections display formatted tables with index, category, name, value, and date
 
-Example: `search McDonald's`
+Example: `search mcdonald's`
 
 Output:
 ```
 ________________________________________________________________
 ExpensiveLeh says -> 
+
 Search results for 'mcdonald's':
+
+--- Expenses ---
 Index  Category     Name                 Value      Date        
 1      Food         McDonald's Meal      $15.00     20-03-2026  
+
+________________________________________________________________
+```
+
+Example: `search john`
+
+Output:
+```
+________________________________________________________________
+ExpensiveLeh says -> 
+
+Search results for 'john':
+
+--- Loans ---
+Index  Category     Name                 Value      Date        
+1      Loan         John                 $50.00     20-03-2026  
+2      Loan         Johnny's Pizza       $15.00     21-03-2026  
 
 ________________________________________________________________
 ```
@@ -408,7 +429,10 @@ Output:
 ```
 ________________________________________________________________
 ExpensiveLeh says -> 
+
 Search results for 'food':
+
+--- Expenses ---
 Index  Category     Name                 Value      Date        
 1      Food         McDonald's Meal      $15.00     20-03-2026  
 2      Food         Noodles              $6.00      12-03-2026  
@@ -416,12 +440,12 @@ Index  Category     Name                 Value      Date
 ________________________________________________________________
 ```
 
-If no expenses match the keyword: `search xyz`
+If no expenses or loans match the keyword: `search xyz`
 
 Output:
 ```
 ________________________________________________________________
-ExpensiveLeh says -> No expenses found with keyword: 'xyz'
+ExpensiveLeh says -> No expenses or loans found with keyword: 'xyz'
 ________________________________________________________________
 ```
 
@@ -485,7 +509,7 @@ To list all loans, use 'list loans'
 To list all bookmarks, use 'list bookmarks'
 To list all category budgets, use 'list budgets'
 To bookmark an expense, use 'bookmark INDEX'. Eg: bookmark 1
-To search for an expense, use 'search KEYWORD'. Eg: search chicken
+To search for expenses and loans, use 'search KEYWORD'. Eg: search chicken
 To rank expenses by amount, use 'rank expenses'
 To rank loans by amount, use 'rank loans'
 To view all commands, use 'help'
@@ -516,12 +540,11 @@ ________________________________________________________________
 
 **Q**: Can I search by category?
 
-**A**: Yes, searching for category names like "food", "transport", "groceries", or "others" will return all expenses 
-in that category.
+**A**: Yes, searching for category names like "food", "transport", "groceries", or "others" will return all expenses in that category. Searching "loan" will return all loans.
 
 **Q**: What if I search for a word that matches both description and category?
 
-**A**: All matching expenses will be returned, whether they match the description or the category.
+**A**: All matching expenses and loans will be returned, whether they match the description or the category.
 
 ## Command Summary
 

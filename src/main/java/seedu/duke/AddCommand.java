@@ -50,7 +50,7 @@ public class AddCommand extends Command {
                 + "\nTotal Owed to You: $" + String.format("%.2f", loans.getTotalAmountLent()));
     }
 
-    public void addBookmark(ExpenseManager expenses, Bookmark bookmark, UI ui) {
+    public void addBookmark(ExpenseManager expenses, Bookmark bookmark, UI ui) throws ExpensiveLehException {
         int index = (Integer) itemToAdd;
         Expense expense = bookmark.getBookmark(index);
 

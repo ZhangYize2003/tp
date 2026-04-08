@@ -6,6 +6,7 @@ import seedu.duke.Transport;
 import seedu.duke.Groceries;
 import seedu.duke.Others;
 import seedu.duke.ExpensiveLehException;
+import loans.Loan;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -54,7 +55,8 @@ public class Bookmark {
         FileWriter fw = new FileWriter(f);
 
         for (Expense e : bookmarks) {
-            String type = e instanceof Food ? "F" : e instanceof Transport ? "T" : e instanceof Groceries ? "G" : "O";
+            String type = e instanceof Loan ? "L" : e instanceof Food ? "F"
+                    : e instanceof Transport ? "T" : e instanceof Groceries ? "G" : "O";
             fw.write(type + " | " + e.getDescription() + " | " + e.getAmount() + " | " + e.getDate()
                     + System.lineSeparator());
         }
@@ -87,6 +89,9 @@ public class Bookmark {
             Expense expense;
 
             switch (category) {
+            case "L":
+                expense = new Loan(description, amount, date);
+                break;
             case "F":
                 expense = new Food(description, amount, date);
                 break;

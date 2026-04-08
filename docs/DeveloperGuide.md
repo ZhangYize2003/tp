@@ -192,7 +192,7 @@ The expense management system in ExpensiveLeh is implemented through the `Expens
 
 The add expense feature is implemented through the `AddCommand` class and `ExpenseManager#addExpense()` method. The flow involves:
 
-1. **Parser Phase**: The user input `expense add /c Food /n Lunch /v 10.50` is parsed to extract category, description, amount, and optionally date.
+1. **Parser Phase**: The user input `add c/Food n/Lunch a/10.50` is parsed to extract category, description, amount, and optionally date.
 
 2. **Command Creation**: Based on the category, an appropriate `Expense` subclass is instantiated (e.g., `Food`, `Transport`, `Groceries`, `Others`).
 
@@ -209,7 +209,7 @@ Example:
 
 **Step 1.** The user launches the application and wants to add a new lunch expense. The user enters the command:
 ```
-expense add /c Food /n Lunch /v 10.50
+add c/Food n/Lunch a/10.50
 ```
 
 **Step 2.** The parser recognizes this as an add expense command and extracts:
@@ -266,7 +266,7 @@ The delete expense feature is implemented through the `DeleteCommand` class and 
 
 **Step 2.** The user decides to delete the first expense and enters:
 ```
-expense delete 1
+delete expense 1
 ```
 
 **Step 3.** The parser creates a `DeleteCommand` with index 0 (converted from 1).
@@ -302,7 +302,7 @@ The edit expense feature is implemented through the `EditCommand` class and `Exp
 
 **Step 1.** The user wants to change the amount of expense at index 2 from $5.00 to $6.00:
 ```
-expense edit 2 /v 6.00
+edit 2 a/6.00
 ```
 
 **Step 2.** The `EditCommand#execute()` retrieves the current expense and creates a new one with the updated amount.
@@ -331,37 +331,49 @@ The budget tracking system supports both global and category-specific budgets:
 
 3. **Case Insensitivity**: All category comparisons and keys are stored and compared in lowercase for consistency.
 
-#### Search Expense Feature
+#### Search Feature
 
 **Proposed Implementation**
 
-The search feature allows users to find expenses by keyword using case-insensitive matching across both the expense description and category. It is implemented through the `SearchCommand` class and `ExpenseManager#searchByKeyword()` method. The flow involves:
+The search feature allows users to find expenses and loans by keyword using case-insensitive matching across both the description and category fields. It is implemented through the `SearchCommand` class, `ExpenseManager#searchByKeyword()` method, and `LoanManager#searchByKeyword()` method. The flow involves:
 
 1. **Parser Phase**: The user input `search KEYWORD` is parsed to extract the search keyword (e.g., "chicken").
 
 2. **Command Creation**: The `Parser` creates a new `SearchCommand` object, passing the lowercase version of the keyword.
 
-3. **Execution**: The `SearchCommand#execute()` method calls `ExpenseManager#searchByKeyword(keyword)` to retrieve matching expenses.
+3. **Execution**: The `SearchCommand#execute()` method calls both:
+   - `ExpenseManager#searchByKeyword(keyword)` to retrieve matching expenses
+   - `LoanManager#searchByKeyword(keyword)` to retrieve matching loans
 
-4. **Matching Logic**: The `searchByKeyword()` method:
-    - Converts the keyword to lowercase for case-insensitive comparison
-    - Iterates through all expenses in the collection
-    - Matches expenses where the description OR category contains the keyword (case-insensitive)
-    - Returns a new `ArrayList<Expense>` containing all matching expenses
+4. **Matching Logic**: Both search methods:
+    - Convert the keyword to lowercase for case-insensitive comparison
+    - Iterate through all items in their respective collections
+    - Match items where the description OR category contains the keyword (case-insensitive)
+    - Return a new `ArrayList` containing all matching items
 
-5. **Feedback**: The UI displays results in a formatted table with Index, Category, Name, Value, and Date columns. If no matches are found, a message is displayed.
+5. **Result Display**: The UI displays:
+   - A "Search results for 'KEYWORD':" header
+   - "--- Expenses ---" section with matched expenses (if any)
+   - "--- Loans ---" section with matched loans (if any)
+   - Formatted tables with Index, Category, Name, Value, and Date columns
+   - If no matches found, displays "No expenses or loans found with keyword: 'KEYWORD'"
 
 **Example Usage Scenario:**
 
-**Step 1.** The user has the following expenses in the system:
+**Step 1.** The user has the following data:
 ```
+Expenses:
 1. Food | Chicken Rice | $8.50 | 20-03-2026
 2. Transport | MRT fare | $2.00 | 20-03-2026
 3. Groceries | Chicken breast | $12.00 | 21-03-2026
 4. Food | Beef noodles | $5.50 | 21-03-2026
+
+Loans:
+1. Loan | John | $50.00 | 19-03-2026
+2. Loan | Chicken Dinner Catering | $45.00 | 20-03-2026
 ```
 
-**Step 2.** The user wants to find all expenses related to "chicken" and enters:
+**Step 2.** The user wants to find all expenses and loans related to "chicken" and enters:
 ```
 search chicken
 ```
@@ -369,7 +381,9 @@ search chicken
 **Step 3.** The `Parser` recognizes the "search" keyword and creates a `SearchCommand` with keyword "chicken". 
 The keyword is automatically converted to lowercase internally for case-insensitive matching.
 
-**Step 4.** The `SearchCommand#execute()` calls `ExpenseManager#searchByKeyword("chicken")`.
+**Step 4.** The `SearchCommand#execute()` calls:
+   - `ExpenseManager#searchByKeyword("chicken")`
+   - `LoanManager#searchByKeyword("chicken")`
 
 **Step 5.** The `ExpenseManager` searches through all expenses:
     - "Chicken Rice" description contains "chicken" ✓ (Match 1)
@@ -377,22 +391,33 @@ The keyword is automatically converted to lowercase internally for case-insensit
     - "Chicken breast" description contains "chicken" ✓ (Match 2)
     - "Beef noodles" description doesn't contain "chicken" ✗
 
-**Step 6.** The method returns a list with 2 matching expenses.
+**Step 6.** The `LoanManager` searches through all loans:
+    - "John" description doesn't contain "chicken" ✗
+    - "Chicken Dinner Catering" description contains "chicken" ✓ (Match 1)
 
-**Step 7.** The UI displays:
+**Step 7.** Both managers return their matching results.
+
+**Step 8.** The UI displays:
 ```
 Search results for 'chicken':
+
+--- Expenses ---
 Index  Category     Name                 Value       Date
 1      Food         Chicken Rice         $8.50       20-03-2026
 2      Groceries    Chicken breast       $12.00      21-03-2026
+
+--- Loans ---
+Index  Category     Name                 Value       Date
+1      Loan         Chicken Dinner Ca... $45.00      20-03-2026
 ```
 
 **Design Characteristics:**
 
-- **Case-Insensitive Matching**: Both the keyword and expense fields are converted to lowercase for comparison, allowing users to search without worrying about capitalization.
-- **Partial Matching**: The search uses substring matching (`.contains()`), so "chick" would match "Chicken Rice" and "Chicken breast".
-- **Dual Field Search**: The search checks both expense description and category, providing flexibility. For example, searching "food" would match any Food category expense.
-- **Non-Destructive**: Search results are displayed separately and don't modify the actual expense list.
+- **Case-Insensitive Matching**: Both the keyword and item fields are converted to lowercase for comparison, allowing users to search without worrying about capitalization.
+- **Partial Matching**: The search uses substring matching (`.contains()`), so "chick" would match "Chicken Rice", "Chicken breast", and "Chicken Dinner Catering".
+- **Dual Field Search**: The search checks both description and category, providing flexibility. For example, searching "food" would match any Food category expense, and searching "loan" would match all loans.
+- **Unified Results**: Results from both expenses and loans are displayed together in organized sections, making it easy to see all matching items at once.
+- **Non-Destructive**: Search results are displayed separately and don't modify the actual data.
 
 The sequence diagram below illustrates the interactions within the system when a user executes the `search KEYWORD` command:
 

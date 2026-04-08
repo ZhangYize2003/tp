@@ -82,4 +82,18 @@ public class LoanManager {
         Loan newLoan = new Loan(finalName, finalValue, finalDate);
         loans.set(index, newLoan);
     }
+
+    public ArrayList<Loan> searchByKeyword(String keyword) {
+        ArrayList<Loan> results = new ArrayList<>();
+        String lowerKeyword = keyword.toLowerCase();
+
+        for (Loan loan : loans) {
+            if (loan.getDescription().toLowerCase().contains(lowerKeyword) ||
+                loan.getCategory().toLowerCase().contains(lowerKeyword)) {
+                results.add(loan);
+            }
+        }
+
+        return results;
+    }
 }
