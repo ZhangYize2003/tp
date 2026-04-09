@@ -593,6 +593,28 @@ Correct format: `add c/CATEGORY a/AMOUNT n/DESCRIPTION [d/DATE]`
 3. Test case: Negative amount provided.
 - Expected `Amount must be positive`.
 
+### Searching for expenses and loans
+
+Correct format: `search KEYWORD`
+
+1. Test case: `search`.
+- Expected: `Please provide a keyword to search. Usage: search KEYWORD`
+
+2. Test case: `search chicken` (keyword that matches expenses and loans).
+- Expected: Displays all expenses and loans containing "chicken" in the name or category.
+
+3. Test case: `search FOOD` (case-insensitive search by category).
+- Expected: Displays all Food category expenses. Search is case-insensitive.
+
+4. Test case: `search xyz` (keyword with no matches).
+- Expected: `No expenses or loans found with keyword: 'xyz'`
+
+5. Test case: `search mrt` (partial keyword match).
+- Expected: Displays the expense with "MRT" in its name or category.
+
+6. Test case: `search loan` (search by category).
+- Expected: Displays all loans since they match the "loan" category.
+
 ### Saving data
 **WARNING:** Save a copy of expenses.txt elsewhere first before attempting any changes to expenses.txt.
 Any unexpected data expected in expenses.txt will cause all data to be deleted.
