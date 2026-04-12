@@ -563,10 +563,12 @@ them to track their expenses so that they do not overspend their budgets.
 | v1.0    | user           | see my past expenses                                        | track my total expenditure                                                              |
 | v1.0    | user           | have an easy to use interface                               | use the  product without much difficulty and fatigue                                    |
 | v1.0    | impatient user | log an expense using a single command                       | record expenses quickly without navigating through multiple inputs                      |
-| v1.0    | user           | delete an expense or loan                                   | remove unwanted entries and entries that are no longer needed                           |
+| v1.0    | user           | delete an expense                                           | remove unwanted entries and entries that are no longer needed                           |
 | v2.0    | user           | edit an existing expense or loan                            | easily correct any misinputs I made or make changes to entries without difficulty       |
 | v2.0    | user           | add people who owe me money                                 | remember to chase them to return my money                                               |
-| v2.0    | user           | mark people who have returned money owed                    | stop chasing them for money                                                             |
+| v2.0    | user           | see my total money lent and to who                          | see a summary of money I lent and to who                                                |
+| v2.0    | user           | mark people who have returned my money                      | stop chasing them for money                                                             |
+| v2.0    | user           | see my past loans                                           | remember all my loans                                                                   |
 | v2.0    | user           | know my remaining budget immediately after logging expenses | know how much money I have saved                                                        |
 | v2.0    | user           | rank my expenses                                            | easily see which category of expense where I have spent the most                        |
 | v2.0    | user           | rank my loans                                               | easily see who owes me the most money                                                   |
@@ -575,14 +577,21 @@ them to track their expenses so that they do not overspend their budgets.
 
 ## Non-Functional Requirements
 
-1. Should work on any mainstream OS as long as it has Java 17 or above installed.
+1. Should work on any mainstream OS as long as it has Java 17 installed.
 2. A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be
 able to accomplish most of the tasks faster using commands than using the mouse.
+3. The application should respond to user commands within 1 second.
+4. The application does not require internet access and can be run fully locally.
+5. Errors shown are descriptive in order to tell users what went wrong. 
+
 ## Glossary
 
 * **Mainstream OS**: Windows, Linux, Unix, MacOS
 * **Expenses**: Food, Groceries, Transport, Others
 * **Name** and **Description** are used interchangeably to mean the name/description of the expense or loan.
+* **Budget** refers to the global budget. This must be more than the sum of **category budgets**.
+* **Category budgets** refer to either the budget for **Food**, **Groceries**, **Transport** or **Others**.
+
 
 ## Instructions for manual testing
 
