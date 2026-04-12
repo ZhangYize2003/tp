@@ -641,6 +641,67 @@ Correct format: `search KEYWORD`
 6. Test case: `search loan` (search by category).
 - Expected: Displays all loans since they match the "loan" category.
 
+### Setting budget
+
+Correct format: `budget AMOUNT` or `budget c/CATEGORY a/AMOUNT`
+
+Eg: `budget 1000` (global budget) or `budget c/food a/200` (category budget)
+
+1. Test case: Set global budget.
+
+    Eg: `budget 1000`
+- Expected: `Global budget set to $1000.00`
+
+2. Test case: Set category budget.
+
+    Eg: `budget c/food a/200`
+- Expected: `Budget for food set to $200.00`
+
+3. Test case: Negative budget amount.
+
+    Eg: `budget -100`
+- Expected: `Budget must be a positive number!`
+
+4. Test case: NaN or Infinity budget amount.
+
+    Eg: `budget NaN`
+- Expected: `Budget must be a valid number!`
+
+5. Test case: Category budget for loan category.
+
+    Eg: `budget c/loan a/100`
+- Expected: `Loans cannot have a budget. Only expenses (food, groceries, transport, others) can have budgets.`
+
+6. Test case: List budgets.
+
+    Eg: `list budgets`
+- Expected: Displays global budget and all category budgets with their remaining amounts.
+
+### Checking remaining budget
+
+After adding expenses, the application tracks remaining budget automatically.
+
+1. Test case: Check remaining budget after adding expenses.
+
+    Steps:
+    - Set budget: `budget 1000`
+    - Add expense: `add c/food n/Lunch a/10`
+- Expected: `Remaining Budget: $990.00`
+
+2. Test case: Check remaining budget after editing expense.
+
+    Steps:
+    - Add expense: `add c/food n/Lunch a/10`
+    - Edit expense: `edit 1 a/20`
+- Expected: Remaining budget decreases by additional $10
+
+3. Test case: Check category budget remaining.
+
+    Steps:
+    - Set category budget: `budget c/food a/200`
+    - Add food expense: `add c/food n/Lunch a/50`
+- Expected: Food category remaining budget shows $150.00
+
 ### Saving data
 **WARNING:** Save a copy of expenses.txt elsewhere first before attempting any changes to expenses.txt.
 

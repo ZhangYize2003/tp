@@ -29,6 +29,16 @@ public class EditCommand extends Command {
             loanManager.editLoan(index, name, value, date);
             ui.showMessage("Loan at index " + (index + 1) + " updated successfully!");
         } else {
+            // Check if category is valid, warn if it will be converted to Others
+            if (category != null) {
+                String normalizedCategory = category.toLowerCase();
+                if (!normalizedCategory.equals("food") && !normalizedCategory.equals("transport")
+                        && !normalizedCategory.equals("groceries") && !normalizedCategory.equals("others")) {
+                    ui.showMessage("Warning: Category '" + category + "' is not recognized. "
+                            + "It has been converted to 'Others'.");
+                }
+            }
+
             ExpenseManager expenseManager = managers.getExpenseManager();
             expenseManager.editExpense(index, category, name, value, date);
             ui.showMessage("Expense at index " + (index + 1) + " updated successfully!");

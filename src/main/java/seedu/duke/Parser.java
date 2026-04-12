@@ -44,6 +44,9 @@ public class Parser {
 
                 // Default to global budget command
                 double budgetAmount = Double.parseDouble(partsBySpace[1]);
+                if (Double.isNaN(budgetAmount) || Double.isInfinite(budgetAmount)) {
+                    throw new ExpensiveLehException("Budget must be a valid number!");
+                }
                 if (budgetAmount <= 0) {
                     throw new ExpensiveLehException("Budget must be a positive number!");
                 }
@@ -212,6 +215,9 @@ public class Parser {
                     date = LocalDate.parse(part.substring(2),
                             java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy"));
                     hasDate = true;
+                } else if (part.startsWith("/") && part.length() > 1) {
+                    throw new ExpensiveLehException("Invalid format. Please use n/ for name, a/ for amount, "
+                            + "c/ for category, or d/ for date. Usage: add c/CATEGORY n/NAME a/AMOUNT [d/DD-MM-YYYY]");
                 }
             }
 
@@ -240,6 +246,9 @@ public class Parser {
             if (amount == null) {
                 throw new ExpensiveLehException(
                         "AMOUNT is required. Usage: add c/CATEGORY n/NAME a/AMOUNT [d/DD-MM-YYYY]");
+            }
+            if (Double.isNaN(amount) || Double.isInfinite(amount)) {
+                throw new ExpensiveLehException("Amount must be a valid number!");
             }
             if (amount <= 0) {
                 throw new ExpensiveLehException("Amount must be positive!");
@@ -371,6 +380,10 @@ public class Parser {
                     date = LocalDate.parse(part.substring(2),
                             java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy"));
                     hasDate = true;
+                } else if (part.startsWith("/") && part.length() > 1) {
+                    throw new ExpensiveLehException("Invalid format. Please use n/ for name, a/ for amount, "
+                            + "c/ for category, or d/ for date. Usage: edit [loan/expense] INDEX "
+                            + "[c/CATEGORY] [n/NAME] [a/AMOUNT] [d/DD-MM-YYYY]");
                 }
             }
 
@@ -389,8 +402,13 @@ public class Parser {
                         "Please specify at least one field to edit: c/CATEGORY, n/NAME, a/AMOUNT, or d/DD-MM-YYYY");
             }
 
-            if (amount != null && amount <= 0) {
-                throw new ExpensiveLehException("Amount must be positive.");
+            if (amount != null) {
+                if (Double.isNaN(amount) || Double.isInfinite(amount)) {
+                    throw new ExpensiveLehException("Amount must be a valid number.");
+                }
+                if (amount <= 0) {
+                    throw new ExpensiveLehException("Amount must be positive.");
+                }
             }
 
             // Pass flag to EditCommand
@@ -437,6 +455,9 @@ public class Parser {
             if (amount == null) {
                 throw new ExpensiveLehException(
                         "Amount is required. Usage: budget c/CATEGORY a/AMOUNT");
+            }
+            if (Double.isNaN(amount) || Double.isInfinite(amount)) {
+                throw new ExpensiveLehException("Budget amount must be a valid number.");
             }
             if (amount <= 0) {
                 throw new ExpensiveLehException("Budget amount must be positive.");
