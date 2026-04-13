@@ -16,8 +16,13 @@ public class ExpensiveLeh {
     public void run() {
         try {
             Storage.StorageData data = storage.load();
-            bookmark.load();
-            
+            int skippedBookmarks = bookmark.load();
+            if (skippedBookmarks > 0) {
+                ui.showLine();
+                ui.showError("Warning: " + skippedBookmarks + " bookmark(s) could not be loaded due to " +
+                        "corrupted data and have been skipped." );
+                ui.showLine();
+            }
             managers = new Managers(new ExpenseManager(data.expenses, data.budget, data.categoryBudgets), 
                     new LoanManager(data.loans), bookmark);
 

@@ -64,15 +64,16 @@ public class Bookmark {
         fw.close();
     }
 
-    public void load() throws IOException {
+    public int load() throws IOException {
         bookmarks.clear();
 
         File f = new File(filePath);
         if (!f.exists()) {
-            return;
+            return 0;
         }
 
         Scanner s = new Scanner(f);
+        int skippedCount = 0;
 
         while (s.hasNextLine()) {
             String line = s.nextLine();
@@ -80,33 +81,57 @@ public class Bookmark {
                 continue;
             }
 
-            String[] parts = line.split(" \\| ");
-            String category = parts[0];
-            String description = parts[1];
-            double amount = Double.parseDouble(parts[2]);
-            LocalDate date = LocalDate.parse(parts[3]);
+            try {
+                if (!line.contains(" | ")) {
+                    throw new IOException("Missing separator ' | '");
+                }
 
-            Expense expense;
+                String[] parts = line.split(" \\| ");
 
-            switch (category) {
-            case "L":
-                expense = new Loan(description, amount, date);
-                break;
-            case "F":
-                expense = new Food(description, amount, date);
-                break;
-            case "T":
-                expense = new Transport(description, amount, date);
-                break;
-            case "G":
-                expense = new Groceries(description, amount, date);
-                break;
-            default:
-                expense = new Others(description, amount, date);
+                if (parts.length != 4) {
+                    throw new IOException("Incorrect number of fields");
+                }
+
+                String category = parts[0];
+                String description = parts[1];
+                double amount = Double.parseDouble(parts[2]);
+                LocalDate date = LocalDate.parse(parts[3]);
+
+                if (amount < 0) {
+                    throw new IOException("Negative amount");
+                }
+
+                Expense expense;
+
+                switch (category) {
+                case "L":
+                    expense = new Loan(description, amount, date);
+                    break;
+                case "F":
+                    expense = new Food(description, amount, date);
+                    break;
+                case "T":
+                    expense = new Transport(description, amount, date);
+                    break;
+                case "G":
+                    expense = new Groceries(description, amount, date);
+                    break;
+                case "O":
+                    expense = new Others(description, amount, date);
+                    break;
+                default:
+                    throw new IOException("Unknown category");
+                }
+
+                bookmarks.add(expense);
+
+            } catch (Exception e) {
+                skippedCount++;
             }
-
-            bookmarks.add(expense);
         }
+
         s.close();
+
+        return skippedCount;
     }
 }
