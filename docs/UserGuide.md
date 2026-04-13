@@ -18,7 +18,7 @@ Format: `budget AMOUNT` or `budget c/CATEGORY a/AMOUNT`
 
 *   Sets the global budget to `AMOUNT` if no category is specified.
 *   Sets a category-specific budget if `c/CATEGORY a/AMOUNT` format is used.
-*   Budget amounts must be positive.
+*   Budget amounts must be positive and less than 1,000,000,000.
 
 Example: `budget 1000` sets the overall budget to $1000.
 
@@ -53,8 +53,8 @@ Adds a new expense to the expense list.
 
 Format: `add c/CATEGORY n/NAME a/AMOUNT [d/DD-MM-YYYY]`
 * `CATEGORY` can be `Food`, `Transport`, `Groceries`, or `Others`.
-* `NAME` can contain multiple words.
-* `AMOUNT` must be a positive number.
+* `NAME` can contain multiple words but prevents some special characters.
+* `AMOUNT` must be a positive number less than 1,000,000,000.
 * `DATE` is optional and defaults to today's date if not specified.
 
 Example: `add c/Food n/Jollibee a/9.95 d/19-03-2026`
@@ -125,7 +125,7 @@ Total Owed to You: $100.00
 ________________________________________________________________
 ```
 ### Adding a bookmark: `bookmark`
-Bookmarks an expense to the bookmark list.
+Saves an existing expense from your expense list as a bookmark, so you can quickly re-add it in the future.
 
 Format: `bookmark INDEX`
 * `INDEX` refers to the index number shown in `list expenses`.
@@ -140,8 +140,10 @@ ExpensiveLeh says -> Successfully bookmarked: Food McDonald's $12.50
 ________________________________________________________________
 ```
 
-### Adding a bookmark to expenses: `add`
-Adds an existing bookmark to the expense list.
+### Adding a bookmarked expense: `add`
+Adds a previously bookmarked expense to your expense list.
+
+> **Tip:** Use `bookmark INDEX` first to save a recurring expense (e.g. a daily coffee or monthly subscription). Then use `add bookmark INDEX` whenever you want to log it again, without re-entering the details.
 
 Format: `add bookmark INDEX`
 * `INDEX` refers to the index number shown in `list bookmarks`.
