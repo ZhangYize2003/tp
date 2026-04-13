@@ -12,7 +12,8 @@ public class ListBudgetsCommand extends Command {
         result.append("Global Budget Remaining: ").append(expenseManager.getRemainingBudget()).append("\n");
 
         if (categoryBudgets.isEmpty()) {
-            ui.showMessage(result + "No category budgets set yet. Use 'budget c/CATEGORY a/AMOUNT' to set a category budget.");
+            ui.showMessage(result + "No category budgets set yet. " +
+                    "Use 'budget c/CATEGORY a/AMOUNT' to set a category budget.");
             return;
         }
 
