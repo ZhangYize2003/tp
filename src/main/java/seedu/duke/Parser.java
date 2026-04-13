@@ -365,6 +365,10 @@ public class Parser {
                         throw new ExpensiveLehException("Duplicate category flag 'c/' found. "
                                 + "Usage: add c/CATEGORY n/NAME a/AMOUNT [d/DD-MM-YYYY]");
                     }
+                    if (isLoan == true){
+                        throw new ExpensiveLehException("Category for loans cannot be changed! " +
+                                "Only debtor name and loan amount can be changed.");
+                    }
                     category = part.substring(2);
                     hasCategory = true;
                 } else if (part.startsWith("n/")) {

@@ -77,7 +77,8 @@ containing `Loans`, `Expenses`, `Budget` and `categoryBudgets`. In other words, 
 object **encapsulates** the various data types used by ExpensiveLeh, 
 allowing for easy transfer between the storage layer and main logic. During data operations,
 
-* The `Storage` object calls `save()` and converts in-memory objects (those in `storageData`) to a text format to be saved on the hard disk.
+* The `Storage` object calls `save()` and converts in-memory objects (such as `Expenses`) to a text format to be saved on the hard disk. This will be described in detail under 'Storage Feature' in the Implementation section.
+`save()` is called on both `Expenses` and `Loans` because they are passed to `Storage` in different ArrayLists. This was done intentionally in anticipation of future operations which may involve only Loans and not the other Expenses or vice versa.  
 * On application start, `Storage` calls `load()` and parses the file line-by-line, recreating the objects in `StorageData`. 
 
 In addition, error handling is handled through `IOException` when corrupted data or invalid file formats are encountered. 
@@ -554,12 +555,12 @@ Given below is an example usage of `BookmarkCommand`:
 ## Product scope
 ### Target user profile
 
-Busy students who want to manage their spending
+Students on exchange who are on tight budgets
 
 ### Value proposition
 
-Students who are busy require an easy and convenient way to manage their finances. Our product serves as an easy way for
-them to track their expenses so that they do not overspend their budgets.
+Students who are on exchange require an easy and convenient way to manage their tight budgets. Our product serves as an easy way for
+them to track their expenses (groceries, transport, food) or loans to friends, which is very common when travelling in groups.  
 
 ## User Stories
 

@@ -47,10 +47,11 @@ skinparam class {
 
 
 ' Relationships
-Storage "1" --> "1" StorageData
-Storage ..> Expense
-Storage ..> IOException
-StorageData "1" o-- "*" Expense
+Storage "1" --> "1" StorageData:  > creates and loads
+Storage ..> Expense: > saves
+Storage ..> "0..1" IOException: > throws
+StorageData "1" o-- "*" Expense: > contains
+Storage ..> Loan : > saves
 
 
 @enduml

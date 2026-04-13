@@ -113,6 +113,7 @@ ________________________________________________________________
 
 ### Adding a loan: `add`
 Adds a new loan to the loan list.    
+Note: ExpensiveLeh tracks each loan seperately. In other words, should the same name be input more than once, ExpensiveLeh will not sum them up.
 
 Format: `add c/loan n/NAME a/AMOUNT [d/DD-MM-YYYY]`
 
