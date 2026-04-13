@@ -56,7 +56,8 @@ public class Parser {
                 }
                 return new BudgetCommand(budgetAmount);
             } catch (NumberFormatException e) {
-                throw new ExpensiveLehException("Please enter a valid budget amount!");
+                throw new ExpensiveLehException(
+                        "Please provide a valid budget amount or use 'budget c/CATEGORY a/AMOUNT'!");
             }
 
         case "add":
