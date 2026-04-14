@@ -14,52 +14,56 @@ ExpensiveLeh is a CLI for managing your personal finances. Users can indicate th
 
 **New feature:** Designed Expense Superclass
 - Created abstract `Expense` superclass with polymorphic support for different expense types (Food, Transport, Groceries, Others)
-- Implemented common methods enabling all expense types to work uniformly through a single interface
 - Extended `Loan` class to inherit from `Expense`, enabling unified handling of both expenses and loans
 
-**New feature:** Search Function
-- Implemented comprehensive search functionality for expenses and loans by keyword with case-insensitive matching
-- Created `searchByKeyword()` method in `LoanManager` mirroring the expense search pattern
-- Enhanced `SearchCommand` to perform parallel searches and combine results into organized sections
+**New feature:** Comprehensive Search Function
+- Implemented keyword-based search across both expenses and loans with case-insensitive matching
+- Implemented `searchByKeywordWithIndices()` in `ExpenseManager` to preserve actual indices in search results
+- Created `searchByKeyword()` method in `LoanManager` for parallel searching
 
 **Bug Fix:** Search Result Index Mismatch
 - Fixed bug where search results displayed incorrect indices, causing delete/edit commands to target wrong expenses
-- Modified `SearchCommand` to display actual expense indices
+- Modified `SearchCommand` to display actual expense indices from the original list
 
 **Enhancement:** UML Diagram Standardization
-- Audited all UML class diagrams and updated 8 diagrams to comply with standard UML 2.0 notation
-- Replaced custom relationship labels with standard UML arrows and added proper multiplicity notation
-
-**Enhancement:** Expense Class Hierarchy Diagram Redesign
-- Redesigned Expense.puml for improved readability with 50% larger scale and reorganized structure
+- Audited and updated 8+ UML class diagrams to comply with standard UML 2.0 notation
+- Replaced non-standard notation (custom labels like "uses >", "manages >", "outputs to >") with standard UML arrows and multiplicity notation
 
 ### Contributions to the User Guide
 
-- **Command documentation**, including:
-  - Documented `add`, `edit`, `delete` commands for expenses, loans, and bookmarks with examples
-  - Documented `list` command showing all types (expenses, loans, bookmarks, budgets) with output formatting
-
-- **Search and Help sections**, including:
-  - Documented search feature with multiple examples covering expense-only, loan-only, and mixed searches
-  - Documented help command with all command formats and FAQ addressing search behavior
+- Documented `add`, `edit`, `delete` commands with examples for expenses, loans, and bookmarks
+- Documented `list` command showing all types (expenses, loans, bookmarks, budgets)
+- Documented `search` command with examples for expense-only, loan-only, and mixed searches
+- Documented `help` command with FAQ section
 
 ### Contributions to the Developer Guide
 
-- **Core design sections**, including:
-  - Designed and documented Expense Superclass with design structure, rationale, and concrete subclasses
-  - Documented ExpenseManager class with key methods and responsibilities
-
-- **Search Feature implementation**, including:
-  - Documented Search Feature with dual-manager architecture, parallel execution, and unified results design
-  - Created UML diagrams: `Expense.puml`, `SearchCommandDiagram.puml` showing complete search flow with both managers
+- Documented Expense Superclass design and inheritance hierarchy
+- Documented ExpenseManager class methods and responsibilities
+- Documented Search Feature with dual-manager architecture
+- Created UML diagrams: `Expense.puml`, `SearchCommandDiagram.puml`
 
 ### Contributions to team-based tasks
 
-- Performed comprehensive testing and verification of the search feature across multiple scenarios
-- Identified and resolved checkstyle violations to ensure code quality
+- Tested search feature with search-by-keyword test cases
+- Fixed checkstyle violations in multiple files
+- Reviewed and approved multiple pull requests before merging
 
 ### Review/mentoring contributions
 
-- Conducted code review on the search feature implementation
-- Verified documentation accuracy across User Guide and Developer Guide
-- Ensured UML diagrams accurately represented implementation details
+- Reviewed pull requests for search feature implementation
+- Corrected UML diagrams for CS2113 compliance
+- Verified documentation accuracy in User Guide and Developer Guide
+
+### Contributions beyond the project team
+
+- Identified and documented 11 bugs in another team's project:
+  - Command recognition failures (confirm command not recognized outside conversion context)
+  - UI assist mode handling of multi-line input
+  - Zero-amount transaction validation
+  - Invalid date handling (Feb 31st silently corrected instead of rejected)
+  - Silent fallback exchange rates without user notification
+  - Case-sensitive account names (violates accounting standards)
+  - Negative posting amounts (violates accounting semantics)
+  - Duplicate command flags silently ignored
+  - Decimal precision rounding not documented
