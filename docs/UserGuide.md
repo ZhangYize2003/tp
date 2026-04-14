@@ -29,8 +29,6 @@ ________________________________________________________________________________
 ExpensiveLeh says -> Budget of $1000.00 set successfully!
 ________________________________________________________________________________
 ```
-    
-
 Example: `budget c/Food a/300` sets the food category budget to $300.
 
 Output:
@@ -40,16 +38,7 @@ ________________________________________________________________________________
 ExpensiveLeh says -> Budget of $300.00 set successfully for Food!
 ________________________________________________________________________________
 ```
-
-Example: `budget c/Transport a/700` sets the transport category budget to $700.
-
-Output:
-
-```
-________________________________________________________________________________
-ExpensiveLeh says -> Budget of $700.00 set successfully for Transport!
-________________________________________________________________________________
-```
+* Budget can be set for other categories as well. (E.g. `c/Transport` or `c/Groceries`)
 
 ### Adding an expense: `add`
 Adds a new expense to the expense list.
@@ -60,6 +49,9 @@ Format: `add c/CATEGORY n/NAME a/AMOUNT [d/DD-MM-YYYY]`
 * `AMOUNT` must be a positive number less than 1,000,000,000.
 * `DATE` is optional and defaults to today's date if not specified.
 * If adding the expense would exceed a category budget or the global budget, a warning will be displayed indicating the overspent amount.
+* If no budget is set, `Remaining Budget` will display negative values.
+> **Note:** The date entered must be within a valid range of 100 years in the past to 10 years in the future from today's date.
+
 
 Example: `add c/Food n/Jollibee a/9.95 d/19-03-2026`
 
@@ -133,7 +125,9 @@ ________________________________________________________________
 ```
 
 ### Adding a loan: `add`
-Adds a new loan to the loan list.    
+* Adds a new loan to the loan list.
+* `DATE` is optional and defaults to today's date if not specified.
+
 Note: ExpensiveLeh tracks each loan seperately. In other words, should the same name be input more than once, ExpensiveLeh will not sum them up.
 
 Format: `add c/loan n/NAME a/AMOUNT [d/DD-MM-YYYY]`
@@ -212,6 +206,8 @@ Remaining Budget: $771.55
 ________________________________________________________________
 ```
 
+* > **Note:** If budget has not been set, `Remaining Budget` will display negative values. 
+
 ### Editing an expense: `edit`
 Edits an existing expense in the expense list.
 
@@ -221,6 +217,8 @@ Format: `edit INDEX [c/CATEGORY] [n/NAME] [a/AMOUNT] [d/DD-MM-YYYY]`
 * `INDEX` must be a positive integer.
 * At least one field must be provided.
 * Only the fields specified will be updated.
+* > **Note:** The date entered must be within a valid range of 100 years in the past to 10 years in the future from today's date.
+
 
 Example: `edit 2 n/McDonald's Meal a/15.00`
 
@@ -580,10 +578,12 @@ ________________________________________________________________
 ### Saving Data
 Loans, expenses, bookmarks and budgets are automatically saved in the disk. There is no need to save manually.
 
-### Exit
-Exits the program.
+### Exiting the Program
+Exits the program and saves your data. You can use either `exit`, `bye` or `quit` interchangeably.
 
 Format: `exit` or `bye` or `quit`
+
+Example of Usage: `bye`
 
 Output:
 

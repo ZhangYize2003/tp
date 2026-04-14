@@ -105,7 +105,7 @@ public class ParserTest {
      */
     @Test
     public void parseEditCommand_validArgs_returnsEditCommand() throws ExpensiveLehException {
-        final String input = "edit 1 n/coffee\n";
+        final String input = "edit expense 1 n/coffee\n";
         final Command result = parse(input);
         assertInstanceOf(EditCommand.class, result);
     }

@@ -24,6 +24,13 @@ class AddCommand {
     + AddCommand(index : int, type : String)
 }
 
+class UI {
+    + showMessage(message : String) : void
+    + printLine() : void
+    + showWelcome() : void
+    + readCommand() : String
+}
+
 abstract class Expense {
     # description : String
     # amount : double

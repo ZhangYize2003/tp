@@ -214,6 +214,8 @@ The add expense feature is implemented through the `AddCommand` class and `Expen
 
 6. **Feedback**: The UI displays a success message with the expense details and remaining budget, along with any budget violation warnings.
 
+7. **Date Validation Constraint**: Command utilises LocalDate to enforce a strict boundary check, ensuring all parsed dates fall between today.minusYears(100) and today.plusYears(10).
+
 Example:
 
 **Step 1.** The user launches the application and wants to add a new lunch expense. The user enters the command:
@@ -307,11 +309,13 @@ The edit expense feature is implemented through the `EditCommand` class and `Exp
 
 3. **Validation**: The index is validated before editing, and assertions ensure data integrity.
 
+4. **Date Validation Constraint**: Command utilises LocalDate to enforce a strict boundary check, ensuring all parsed dates fall between today.minusYears(100) and today.plusYears(10).
+
 **Example Usage Scenario:**
 
 **Step 1.** The user wants to change the amount of expense at index 2 from $5.00 to $6.00:
 ```
-edit 2 a/6.00
+edit expense 2 a/6.00
 ```
 
 **Step 2.** The `EditCommand#execute()` retrieves the current expense and creates a new one with the updated amount.
@@ -322,7 +326,7 @@ edit 2 a/6.00
 
 **Step 5.** The UI confirms the update and displays any budget violation warnings.
 
-![Edit Expense Sequence Diagram](Diagrams/EditExpenseSequenceDiagram.png)
+![Edit Expense Sequence Diagram](Diagrams/Edit_Expense_Sequence_Diagram.png)
 
 #### Budget Tracking Feature
 

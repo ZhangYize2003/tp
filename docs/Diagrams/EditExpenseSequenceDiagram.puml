@@ -7,7 +7,7 @@ participant ":Expense" as Expense
 participant ":Food" as Food
 participant ":UI" as UI
 
-User -> Parser: expense edit INDEX /c CATEGORY /n NAME /v VALUE /d DATE
+User -> Parser: edit expense(or loan) INDEX /c CATEGORY /n NAME /v VALUE /d DATE
 activate Parser
 
 Parser -> EditCmd: new EditCommand(...)
