@@ -40,8 +40,28 @@ public class EditCommand extends Command {
             }
 
             ExpenseManager expenseManager = managers.getExpenseManager();
+
+            // Get current expense to determine final category
+            Expense currentExpense = expenseManager.getExpense(index);
+            String finalCategory = category != null ? category : currentExpense.getCategory();
+
             expenseManager.editExpense(index, category, name, value, date);
-            ui.showMessage("Expense at index " + (index + 1) + " updated successfully!");
+
+            // Calculate budget impact after editing
+            double categoryBudget = expenseManager.getCategoryBudget(finalCategory);
+            double remainingCategoryBudget = expenseManager.getRemainingBudgetForCategory(finalCategory);
+            double remainingGlobalBudget = expenseManager.getRemainingBudget();
+            String message = "Expense at index " + (index + 1) + " updated successfully!";
+
+            if (categoryBudget > 0 && remainingCategoryBudget < 0) {
+                message += "\nWarning: You have overspent the " + finalCategory
+                        + " budget by $" + String.format("%.2f", Math.abs(remainingCategoryBudget));
+            }
+            if (remainingGlobalBudget < 0) {
+                message += "\nWarning: You have overspent the global budget by $"
+                        + String.format("%.2f", Math.abs(remainingGlobalBudget));
+            }
+            ui.showMessage(message);
         }
     }
 }

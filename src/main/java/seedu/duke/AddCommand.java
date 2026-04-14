@@ -28,14 +28,27 @@ public class AddCommand extends Command {
     private void addExpense(ExpenseManager expenses, UI ui) throws ExpensiveLehException {
         Expense expense = (Expense) itemToAdd;
         expenses.addExpense(expense);
-        ui.showMessage("Expense added successfully!"
+        double categoryBudget = expenses.getCategoryBudget(expense.getCategory());
+        double remainingCategoryBudget = expenses.getRemainingBudgetForCategory(expense.getCategory());
+        double remainingGlobalBudget = expenses.getRemainingBudget();
+        String message = "Expense added successfully!"
                 + "\n================================================"
                 + "\nCategory : " + expense.getCategory()
                 + "\nName     : " + expense.getDescription()
                 + "\nValue    : $" + String.format("%.2f", expense.getAmount())
                 + "\nDate     : " + expense.getFormattedDate()
                 + "\n================================================"
-                + "\nRemaining Budget: $" + String.format("%.2f", expenses.getRemainingBudget()));
+                + "\nRemaining Budget: $" + String.format("%.2f", remainingGlobalBudget);
+
+        if (categoryBudget > 0 && remainingCategoryBudget < 0) {
+            message += "\nWarning: You have overspent the " + expense.getCategory()
+                    + " budget by $" + String.format("%.2f", Math.abs(remainingCategoryBudget));
+        }
+        if (remainingGlobalBudget < 0) {
+            message += "\nWarning: You have overspent the global budget by $"
+                    + String.format("%.2f", Math.abs(remainingGlobalBudget));
+        }
+        ui.showMessage(message);
     }
 
     private void addLoan(LoanManager loans, UI ui) throws ExpensiveLehException {
@@ -68,13 +81,26 @@ public class AddCommand extends Command {
         }
 
         expenses.addExpense(newExpense);
-        ui.showMessage("Expense added successfully!"
+        double categoryBudget = expenses.getCategoryBudget(newExpense.getCategory());
+        double remainingCategoryBudget = expenses.getRemainingBudgetForCategory(newExpense.getCategory());
+        double remainingGlobalBudget = expenses.getRemainingBudget();
+        String message = "Expense added successfully!"
                 + "\n================================================"
                 + "\nCategory : " + newExpense.getCategory()
                 + "\nName     : " + newExpense.getDescription()
                 + "\nValue    : $" + String.format("%.2f", newExpense.getAmount())
                 + "\nDate     : " + newExpense.getFormattedDate()
                 + "\n================================================"
-                + "\nRemaining Budget: $" + String.format("%.2f", expenses.getRemainingBudget()));
+                + "\nRemaining Budget: $" + String.format("%.2f", remainingGlobalBudget);
+
+        if (categoryBudget > 0 && remainingCategoryBudget < 0) {
+            message += "\nWarning: You have overspent the " + newExpense.getCategory()
+                    + " budget by $" + String.format("%.2f", Math.abs(remainingCategoryBudget));
+        }
+        if (remainingGlobalBudget < 0) {
+            message += "\nWarning: You have overspent the global budget by $"
+                    + String.format("%.2f", Math.abs(remainingGlobalBudget));
+        }
+        ui.showMessage(message);
     }
 }
